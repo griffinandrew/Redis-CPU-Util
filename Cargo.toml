@@ -1,0 +1,9 @@
+[package]
+name = "cpu_util"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clock_ticks = "0.1.1"
+procfs = "0.16.0"
+sysinfo = "0.31.4"
