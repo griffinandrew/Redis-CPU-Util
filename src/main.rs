@@ -49,7 +49,7 @@ impl Stats {
 }
 
 
-fn get_redis_cpu(res_file: String, mut stats: Stats) {
+fn get_redis_cpu(res_file: String, mut stats: Stats, run_length: i32) {
     let sys_1 = System::new_all();
     //needed to do this to to cast to i32 to track the proc info
     let mut redis_pid:Pid = 0.into();
@@ -69,7 +69,7 @@ fn get_redis_cpu(res_file: String, mut stats: Stats) {
     let start_ticks = precise_time_s(); 
 
     //end_run is sample size
-    let end_run = 11;
+    let end_run = run_length;
     for i in 0..end_run {
 
         //at init get all stats
@@ -106,7 +106,13 @@ fn get_redis_cpu(res_file: String, mut stats: Stats) {
 
 
 fn main() {
+    let args: Vec<String> = std::env::args().collect();
+        if args.len() != 2 {
+        eprintln!("Error: Usage: enter the length of sampling period in seconds");
+        std::process::exit(1);
+    }
+    let test_length = args[1].parse::<i32>().unwrap();
     let cpu_stats = Stats::default(); 
     let file_name = "redis_cpu_stats.txt".to_string();
-    get_redis_cpu(file_name, cpu_stats);
+    get_redis_cpu(file_name, cpu_stats, test_length);
 }
